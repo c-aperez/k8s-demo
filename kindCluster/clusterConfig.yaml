@@ -1,0 +1,19 @@
+kind: Cluster                      # Tipo de recurso que se está definiendo: un clúster de Kubernetes local.
+apiVersion: kind.x-k8s.io/v1alpha4  # Versión de la API de Kind que se está utilizando.
+
+nodes:                             # Lista de nodos que compondrán el clúster.
+  - role: control-plane            # Nodo principal que actúa como "control-plane" (master): gestiona el estado del clúster.
+    image: kindest/node:v1.32.0    # Imagen del nodo de Kubernetes a usar (v1.32.0).
+
+  - role: worker                   # Nodo de trabajo: ejecuta pods de usuario.
+    image: kindest/node:v1.32.0    # Se usa la misma versión de nodo.
+
+  - role: worker                   # Otro nodo worker adicional (útil para balanceo y pruebas de tolerancia).
+    image: kindest/node:v1.32.0
+
+  - role: worker                   # Tercer nodo worker.
+    image: kindest/node:v1.32.0
+    extraPortMappings:             # Mapeo de puertos adicionales para el nodo worker.
+      - containerPort: 30222       # Puerto del contenedor (donde el servicio escucha).
+        hostPort: 30222            # Puerto del host (nodo) al que se asigna el tráfico.
+        protocol: TCP               # Protocolo utilizado (TCP en este caso).
