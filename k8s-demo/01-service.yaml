@@ -3,6 +3,7 @@ kind: Service         # Tipo de recurso: en este caso es un "Service" para expon
 
 metadata:
   name: svc-dcsar-basic-landing-page  # Nombre del Service.
+  namespace: dcsarapp                 # Namespace en el que se desplegará este Deployment.
 
 spec:
   type: NodePort        # Tipo de Service: expone el servicio en un puerto del nodo (útil para acceso externo sin LoadBalancer).

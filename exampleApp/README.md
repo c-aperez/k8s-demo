@@ -51,7 +51,7 @@ CMD ["nginx", "-g", "daemon off;"]
 2. Ejecuta el contenedor:
 
    ```bash
-   docker run -d -p 8080:80 mi-landing-page
+   docker run --rm -d -p 8080:80 mi-landing-page
    ```
 
 3. Abre en tu navegador:

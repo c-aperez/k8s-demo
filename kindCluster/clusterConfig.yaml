@@ -13,7 +13,7 @@ nodes:                             # Lista de nodos que compondrán el clúster.
 
   - role: worker                   # Tercer nodo worker.
     image: kindest/node:v1.32.0
-    extraPortMappings:             # Mapeo de puertos adicionales para el nodo worker.
-      - containerPort: 30222       # Puerto del contenedor (donde el servicio escucha).
-        hostPort: 30222            # Puerto del host (nodo) al que se asigna el tráfico.
-        protocol: TCP               # Protocolo utilizado (TCP en este caso).
+    # extraPortMappings:             # Mapeo de puertos adicionales para el nodo worker.
+    #   - containerPort: 30222       # Puerto del contenedor (donde el servicio escucha).
+    #     hostPort: 30222            # Puerto del host (nodo) al que se asigna el tráfico.
+    #     protocol: TCP               # Protocolo utilizado (TCP en este caso).

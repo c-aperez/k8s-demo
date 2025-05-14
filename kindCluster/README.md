@@ -26,8 +26,8 @@ Este clúster está compuesto por:
 ```text
 [Control Plane]
      │
- ┌───┴────────┐
- │           │
+ ┌───┴─────────┐───────────┐
+ │             │           │
 [Worker 1] [Worker 2] [Worker 3]
 ```
 
@@ -65,7 +65,7 @@ nodes:
 3. Crea el clúster:
 
    ```bash
-   kind create cluster --name ''Nombre-de-tu-cluster'' --config kind-cluster.yaml
+   kind create cluster --name ''Nombre-de-tu-cluster'' --config clusterConfig.yaml
    ```
 
 4. Verifica el estado:

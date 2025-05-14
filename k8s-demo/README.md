@@ -34,15 +34,15 @@ Un [**Deployment**](https://kubernetes.io/docs/concepts/workloads/controllers/de
 
 🔧 Este Deployment:
 
-- 🔁 Mantiene **2 réplicas** activas de la app.
+- 🔁 Mantiene **1 réplicas** activas de la app.
 - 🐳 Usa la imagen `dcsarapp:v1`.
 - 🔄 Aplica actualizaciones con estrategia `RollingUpdate`.
 - ⚙️ Define **límites de CPU y memoria** para estabilidad.
 
 ```text
 [Deployment]
-   └── [2 Pods]
-         └── [Contenedor: dcsarapp:v5]
+   └── [1 Pods]
+         └── [Contenedor: dcsarapp:v1]
 ```
 
 📚 [Más sobre Deployments →](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
@@ -71,6 +71,33 @@ Un [**Service**](https://kubernetes.io/docs/concepts/services-networking/service
 
 ---
 
+## 📈 HorizontalPodAutoscaler (HPA)
+
+El recurso [**HorizontalPodAutoscaler**](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) permite escalar automáticamente el número de pods de una aplicación en función de métricas como uso de CPU o memoria.
+
+🔧 En este caso:
+
+- 📊 Se escala según el **uso de memoria**.
+- 📉 El número mínimo de réplicas es `1`.
+- 📈 El número máximo de réplicas es `3`.
+- 🧠 Escala cuando el uso promedio de memoria supera el **70%**.
+
+```yaml
+metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+Esto permite que tu aplicación se adapte automáticamente a la demanda de tráfico sin intervención manual. 🧩
+
+📚 [Más sobre HPA →](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+
+---
+
 ## 🧭 Flujo de Funcionamiento
 
 ```text
@@ -86,10 +113,14 @@ Un [**Service**](https://kubernetes.io/docs/concepts/services-networking/service
 │ Service: NodePort     │
 └────────┬──────────────┘
          ↓
-┌────────┴──────────────┐
-│ Pod con contenedor    │
+┌────────┴───────────-───┐
+│ Pod con contenedor     │
 │ dcsarapp:v5 (Puerto 80)│
-└───────────────────────┘
+└────────┬─────────────-─┘
+         ↓
+       (HPA)
+  Evalúa uso de memoria
+  y escala según demanda
 ```
 
 ---
@@ -108,23 +139,22 @@ Un [**Service**](https://kubernetes.io/docs/concepts/services-networking/service
    ```bash
    kubectl apply -f deployment.yaml
    kubectl apply -f service.yaml
+   kubectl apply -f hpa.yaml
    ```
 
 4. Verifica los recursos:
 
    ```bash
    kubectl get all -n dcsarapp
+   kubectl describe hpa hpa-dcsar-basic-landing-page -n dcsarapp
    ```
-
-
 
 ---
 
 ## 📚 Recursos útiles
 
 - 📖 [Documentación oficial de Kubernetes](https://kubernetes.io/es/docs/home/)
-- 🎓 [Conceptos clave: Pods, Deployments, Services, Namespaces](https://kubernetes.io/es/docs/concepts/)
+- 🎓 [Conceptos clave: Pods, Deployments, Services, Namespaces, HPA](https://kubernetes.io/es/docs/concepts/)
 - 🧪 [Probar servicios con curl](https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/#accessing-services-running-on-the-cluster)
 
 ---
-

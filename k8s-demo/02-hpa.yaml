@@ -1,0 +1,27 @@
+apiVersion: autoscaling/v2           # Versión de la API para escalamiento horizontal (v2 permite múltiples métricas).
+kind: HorizontalPodAutoscaler        # Especifica que este recurso es un HPA (escalador horizontal de pods).
+
+metadata:
+  name: hpa-dcsar-basic-landing-page # Nombre que se le asigna al HPA.
+  namespace: dcsarapp                 # Namespace en el que se desplegará este Deployment.
+
+spec:
+  scaleTargetRef:                    # Define qué recurso será escalado por este HPA.
+    apiVersion: apps/v1              # API del recurso objetivo (en este caso, un Deployment).
+    kind: Deployment                 # Tipo de recurso a escalar (Deployment, StatefulSet, etc.).
+    name: dcsar-basic-landing-page   # Nombre exacto del Deployment que se desea escalar.
+
+  minReplicas: 1                     # Número mínimo de réplicas que tendrá el deployment, incluso si no hay carga.
+  maxReplicas: 3                     # Número máximo de réplicas que el HPA puede escalar si la carga es alta.
+
+  metrics:                           # Definición de las métricas que usarán para tomar decisiones de escalado.
+  - type: Resource                   # Tipo de métrica, en este caso "Resource" para recursos como CPU o memoria.
+    resource:
+      name: memory                   # El recurso a monitorear: "memory" (puede ser "cpu" también).
+      target:
+        type: Utilization            # Tipo de objetivo: "Utilization" significa porcentaje de uso relativo.
+        averageUtilization: 70      # Escalará si el uso promedio de memoria supera el 70% entre los pods.
+
+# Ejemplo de comportamiento:
+# 📈 Si tienes 1 pod y su memoria excede el 70% durante un tiempo sostenido, HPA puede escalar a 2 pods.
+# 📉 Si aún con 2 pods, el uso promedio sigue alto, puede escalar hasta 3 (el máximo definido).
