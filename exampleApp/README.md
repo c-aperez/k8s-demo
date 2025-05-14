@@ -60,6 +60,21 @@ CMD ["nginx", "-g", "daemon off;"]
    http://localhost:8080
    ```
 
+## 🛠️ ¿Cómo construir y subir esta imagen a mi cluster de Kind?
+
+1. Construye la imagen:
+
+   ```bash
+   docker build -t mi-landing-page .
+   ```
+
+2. Cargar la imagen nueva al Cluster:
+
+   ```bash
+   kind load docker-image <mi-landing-page> --name <nombre-de-cluster>
+   ```
+
+
 ---
 
 ## 📚 Recursos útiles
